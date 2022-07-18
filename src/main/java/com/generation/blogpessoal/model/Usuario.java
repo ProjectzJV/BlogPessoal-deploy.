@@ -1,13 +1,19 @@
 package com.generation.blogpessoal.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -16,8 +22,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public class Usuario {
 
 	@Id
-	@GeneratedValue(strategy	= GenerationType.IDENTITY)
-	private long id;
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	private Long id;
+	
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+	@JsonIgnoreProperties("usuario")
+	private List<Postagem> postagem;
 	
 	@NotNull
 	@Size(min = 2, max = 100)
@@ -29,17 +39,23 @@ public class Usuario {
 	private String usuario;
 	
 	@NotNull
-	@Size(min = 8, max = 16)
+	@Size(min = 8)
 	private String senha;
 
-	public Usuario(long l, String string, String string2, String string3, String string4) {
+	public Usuario(Long id, String nome, String usuario, String senha) {
+		this.id = id;
+		this.nome = nome;
+		this.usuario = usuario;
+		this.senha = senha;
 	}
 
-	public long getId() {
+	public Usuario() {	}
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -66,4 +82,15 @@ public class Usuario {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
+
+	public List<Postagem> getPostagem() {
+		return postagem;
+	}
+
+	public void setPostagem(List<Postagem> postagem) {
+		this.postagem = postagem;
+	}
+
+
+	
 }
